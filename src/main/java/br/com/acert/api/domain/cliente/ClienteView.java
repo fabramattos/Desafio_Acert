@@ -1,8 +1,8 @@
 package br.com.acert.api.domain.cliente;
 
-public record ViewCliente(Long id, String nome, String login) {
+public record ClienteView(Long id, String nome, String login) {
 
-    public ViewCliente(Cliente cliente) {
+    public ClienteView(Cliente cliente) {
         this(cliente.getId(), cliente.getNome(), cliente.getLogin());
     }
 }

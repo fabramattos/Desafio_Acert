@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ClienteService implements UserDetailsService {
 
@@ -18,28 +20,29 @@ public class ClienteService implements UserDetailsService {
         return repository.findByLogin(username);
     }
 
-    public ViewCliente criar(FormNovoCliente form){
-        var cliente = new Cliente(form);
-        return new ViewCliente(repository.save(cliente));
+    public Cliente criar(ClienteFormNovo form) {
+        return repository.save(new Cliente(form));
     }
 
-    public ViewCliente alterar(FormAtualizaCliente form){
-        var cliente =  buscaPorId(form.id());
-        return new ViewCliente(cliente.atualiza(form));
+    public Cliente alterar(ClienteFormAtualiza form) {
+        return repository
+                .findById(form.id())
+                .orElseThrow()
+                .atualiza(form);
     }
 
-    public void deletar(Long id){
-        var cliente = buscaPorId(id);
-        repository.delete(cliente);
+    public void deletar(Long id) {
+        repository.deleteById(id);
     }
 
-    public ViewCliente consultar(Long id){
-        var cliente = buscaPorId(id);
-        return new ViewCliente(cliente);
+    public Cliente consultar(Long id) {
+        return repository
+                .findById(id)
+                .orElseThrow();
     }
 
-    private Cliente buscaPorId(Long id){
-        return repository.findById(id).orElseThrow();
+    public List<Cliente> listar() {
+        return repository.findAll();
     }
 
 }
