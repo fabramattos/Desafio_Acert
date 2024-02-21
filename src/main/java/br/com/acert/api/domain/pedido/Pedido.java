@@ -1,14 +1,12 @@
 package br.com.acert.api.domain.pedido;
 
 import br.com.acert.api.domain.cliente.Cliente;
-import br.com.acert.api.domain.item.Item;
-import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Data
 @Entity
+@Getter
 @Table(name = "pedidos")
 public class Pedido {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -18,6 +16,17 @@ public class Pedido {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
-    private List<Item> itens;
+    private String descricao;
+
+    public Pedido(Cliente cliente, String descricao) {
+        this.cliente = cliente;
+        this.descricao = descricao;
+    }
+
+    public Pedido atualiza (PedidoFormAtualiza form){
+        descricao = form.descricao();
+        return this;
+    }
 }
+
+
