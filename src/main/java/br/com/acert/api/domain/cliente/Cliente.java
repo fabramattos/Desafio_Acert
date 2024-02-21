@@ -1,7 +1,6 @@
 package br.com.acert.api.domain.cliente;
 
 import br.com.acert.api.domain.pedido.Pedido;
-import lombok.Data;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,13 +22,13 @@ public class Cliente implements UserDetails {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
 
-    public Cliente(FormNovoCliente form) {
+    public Cliente(ClienteFormNovo form) {
         nome = form.nome();
         login = form.login();
         senha = form.senha(); //TODO usar encode de senha antes de gravar no banco
     }
 
-    public Cliente atualiza(FormAtualizaCliente form){
+    public Cliente atualiza(ClienteFormAtualiza form){
         if(!form.nome().isBlank())
             nome = form.nome();
         if(!form.login().isBlank())

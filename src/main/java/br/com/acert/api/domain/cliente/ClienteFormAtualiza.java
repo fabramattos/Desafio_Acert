@@ -1,6 +1,6 @@
 package br.com.acert.api.domain.cliente;
 
-public record FormAtualizaCliente(
+public record ClienteFormAtualiza(
         Long id,
         String nome,
         String login,
