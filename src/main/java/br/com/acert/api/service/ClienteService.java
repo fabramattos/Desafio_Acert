@@ -1,6 +1,9 @@
 package br.com.acert.api.service;
 
-import br.com.acert.api.domain.cliente.*;
+import br.com.acert.api.domain.cliente.Cliente;
+import br.com.acert.api.domain.cliente.ClienteFormAtualiza;
+import br.com.acert.api.domain.cliente.ClienteFormNovo;
+import br.com.acert.api.domain.cliente.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
