@@ -7,7 +7,7 @@ import br.com.acert.api.domain.cliente.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +16,21 @@ import java.util.List;
 public class ClienteService implements UserDetailsService {
 
     @Autowired
-    ClienteRepository repository;
+    private ClienteRepository repository;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByLogin(username);
+    public UserDetails loadUserByUsername(String username) {
+        return repository
+                .findByLogin(username)
+                .orElseThrow();
     }
 
     public Cliente criar(ClienteFormNovo form) {
-        return repository.save(new Cliente(form));
+        var formCodificado = new ClienteFormNovo(form.nome(), form.login(), encoder.encode(form.senha()));
+        return repository.save(new Cliente(formCodificado));
     }
 
     public Cliente alterar(ClienteFormAtualiza form) {

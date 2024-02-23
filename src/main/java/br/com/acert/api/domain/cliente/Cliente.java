@@ -6,34 +6,42 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
+@Entity(name = "Cliente")
 @Getter
-@Table(name = "clientes")
 public class Cliente implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @NotNull
     private String nome;
+    @NotNull
     private String login;
+    @NotNull
     private String senha;
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<Pedido> pedidos;
+    private List<Pedido> pedidos = new ArrayList<>();
+
+    //Necessário para spring jpa gerar Objeto a partir do DB
+    public Cliente() {
+    }
 
     public Cliente(ClienteFormNovo form) {
         nome = form.nome();
         login = form.login();
-        senha = form.senha(); //TODO usar encode de senha antes de gravar no banco
+        senha = form.senha();
     }
 
-    public Cliente atualiza(ClienteFormAtualiza form){
-        if(!form.nome().isBlank())
+    public Cliente atualiza(ClienteFormAtualiza form) {
+        if (!form.nome().isBlank())
             nome = form.nome();
-        if(!form.login().isBlank())
+        if (!form.login().isBlank())
             login = form.login();
-        if(!form.senha().isBlank())
+        if (!form.senha().isBlank())
             senha = form.senha();
 
         return this;
@@ -56,21 +64,21 @@ public class Cliente implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
