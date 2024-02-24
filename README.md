@@ -20,8 +20,9 @@ Este é um projeto simplificado para o controle de delivery de um restaurante, d
 - Permitir o cadastro, alteração, deleção e consulta de entregas. Uma entrega obrigatoriamente necessita estar vinculada a um pedido.
 
 ## Instruções para Execução
-### Via Web (servidor será desativado após avaliação):
-acessar: https://acert.up.railway.app/swagger-ui/index.html
+### Via Web:
+https://acert.up.railway.app/swagger-ui/index.html
+Obs: (servidor será desativado após avaliação)
 
 ### Localmente, sem Docker:
 1. Certifique-se de ter instalado em sua máquina: Java 17, PostgresSQL
