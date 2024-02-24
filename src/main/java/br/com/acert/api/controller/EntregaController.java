@@ -1,9 +1,8 @@
 package br.com.acert.api.controller;
 
-import br.com.acert.api.domain.entrega.EntregaFormAtualiza;
-import br.com.acert.api.domain.entrega.EntregaFormNovo;
-import br.com.acert.api.domain.entrega.EntregaView;
+import br.com.acert.api.domain.entrega.*;
 import br.com.acert.api.service.EntregaService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/entrega")
+@SecurityRequirement(name = "bearer-key")
 public class EntregaController {
 
     @Autowired
@@ -23,32 +23,43 @@ public class EntregaController {
     @Transactional
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<EntregaView> criaEntrega(@RequestBody @Valid EntregaFormNovo form){
+    public ResponseEntity<EntregaViewSimples> criaEntrega(@RequestBody @Valid EntregaFormNovo form){
         var entrega = service.criar(form);
-        return ResponseEntity.ok(new EntregaView(entrega));
+        return ResponseEntity.ok(new EntregaViewSimples(entrega));
     }
 
     @Transactional
     @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<EntregaView> alteraEntrega(@RequestBody @Valid EntregaFormAtualiza form){
+    public ResponseEntity<EntregaViewSimples> alteraEntrega(@RequestBody @Valid EntregaFormAtualiza form){
         var entrega = service.atualizar(form);
-        return ResponseEntity.ok(new EntregaView(entrega));
+        return ResponseEntity.ok(new EntregaViewSimples(entrega));
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<EntregaView> detalhaEntrega(@PathVariable Long id){
-        var entrega = service.detalhar(id);
+        var entrega = service.buscar(id);
         return ResponseEntity.ok(new EntregaView(entrega));
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<List<EntregaView>> listaEntregas(){
-        //TODO criar acesso admin
         var entregas = service
                 .listar()
+                .stream()
+                .map(EntregaView::new)
+                .toList();
+
+        return ResponseEntity.ok(entregas);
+    }
+
+    @GetMapping("/listar")
+    @ResponseStatus(HttpStatus.FOUND)
+    public ResponseEntity<List<EntregaView>> listaEntregasTodosClientes(){
+        var entregas = service
+                .listarDeTodosClientes() //TODO aplicar paginação
                 .stream()
                 .map(EntregaView::new)
                 .toList();

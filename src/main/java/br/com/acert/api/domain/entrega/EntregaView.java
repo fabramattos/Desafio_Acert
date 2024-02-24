@@ -1,31 +1,14 @@
 package br.com.acert.api.domain.entrega;
 
-import br.com.acert.api.domain.pedido.PedidoView;
+import br.com.acert.api.domain.pedido.PedidoViewSimples;
 
 public record EntregaView(
-        Long id,
-        String UF,
-        String cidade,
-        String cep,
-        String bairro,
-        String logradouro,
-        Integer numero,
-        String complemento,
-        EntregaStatus status,
-        PedidoView pedido
+        EntregaViewSimples entrega,
+        PedidoViewSimples pedido
+
 ) {
 
-    public EntregaView(Entrega entrega){
-        this(entrega.getId(),
-                entrega.getUF(),
-                entrega.getCidade(),
-                entrega.getCep(),
-                entrega.getBairro(),
-                entrega.getLogradouro(),
-                entrega.getNumero(),
-                entrega.getComplemento(),
-                entrega.getStatus(),
-                new PedidoView(entrega.getPedido())
-        );
+    public EntregaView(Entrega entrega) {
+        this(new EntregaViewSimples(entrega), new PedidoViewSimples(entrega.getPedido()));
     }
 }

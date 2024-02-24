@@ -2,9 +2,10 @@ package br.com.acert.api.domain.entrega;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public record EntregaFormNovo(
-        @NotBlank
+        @NotNull
         Long pedidoId,
         @NotBlank
         String UF,
@@ -16,7 +17,7 @@ public record EntregaFormNovo(
         String bairro,
         @NotBlank
         String logradouro,
-        @NotBlank
+        @NotNull
         Integer numero,
         String complemento
 ) {

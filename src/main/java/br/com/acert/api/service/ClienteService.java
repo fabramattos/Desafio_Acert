@@ -5,6 +5,7 @@ import br.com.acert.api.domain.cliente.ClienteFormAtualiza;
 import br.com.acert.api.domain.cliente.ClienteFormNovo;
 import br.com.acert.api.domain.cliente.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,9 @@ public class ClienteService implements UserDetailsService {
     @Autowired
     private PasswordEncoder encoder;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         return repository
@@ -33,25 +37,25 @@ public class ClienteService implements UserDetailsService {
         return repository.save(new Cliente(formCodificado));
     }
 
-    public Cliente alterar(ClienteFormAtualiza form) {
+    public Cliente alterarIdAutenticado(ClienteFormAtualiza form) {
         return repository
-                .findById(form.id())
+                .findById(tokenService.idUsuarioAutenticado())
                 .orElseThrow()
                 .atualiza(form);
     }
 
-    public void deletar(Long id) {
-        repository.deleteById(id);
+    public void deletarIdAutenticado() {
+        repository.deleteById(tokenService.idUsuarioAutenticado());
     }
 
-    public Cliente consultar(Long id) {
+    public Cliente consultarIdAutenticado() {
         return repository
-                .findById(id)
+                .findById(tokenService.idUsuarioAutenticado())
                 .orElseThrow();
     }
 
+    @Secured("ROLE_ADMIN")
     public List<Cliente> listar() {
         return repository.findAll();
     }
-
 }

@@ -1,10 +1,10 @@
 package br.com.acert.api.domain.entrega;
 
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public record EntregaFormAtualiza(
-        @NotBlank
+        @NotNull
         Long id,
         String UF,
         String cidade,

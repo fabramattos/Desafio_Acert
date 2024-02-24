@@ -2,8 +2,10 @@ package br.com.acert.api.controller;
 
 import br.com.acert.api.domain.pedido.PedidoFormAtualiza;
 import br.com.acert.api.domain.pedido.PedidoFormNovo;
-import br.com.acert.api.domain.pedido.PedidoView;
+import br.com.acert.api.domain.pedido.PedidoViewSimples;
+import br.com.acert.api.domain.pedido.PedidoViewComEntrega;
 import br.com.acert.api.service.PedidoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pedido")
+@SecurityRequirement(name = "bearer-key")
 public class PedidoController {
 
     @Autowired
@@ -23,37 +26,48 @@ public class PedidoController {
     @Transactional
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<PedidoView> criaPedido(@RequestBody @Valid PedidoFormNovo form){
+    public ResponseEntity<PedidoViewSimples> criaPedido(@RequestBody @Valid PedidoFormNovo form){
         var pedido = service.criar(form);
-        return ResponseEntity.ok(new PedidoView(pedido));
+        return ResponseEntity.ok(new PedidoViewSimples(pedido));
     }
 
     @Transactional
     @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<PedidoView> alteraPedido(@RequestBody @Valid PedidoFormAtualiza form){
+    public ResponseEntity<PedidoViewSimples> alteraPedido(@RequestBody @Valid PedidoFormAtualiza form){
         var pedido = service.alterar(form);
-        return ResponseEntity.ok(new PedidoView(pedido));
+        return ResponseEntity.ok(new PedidoViewSimples(pedido));
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public ResponseEntity<PedidoView> detalhaPedido(@PathVariable Long id){
+    public ResponseEntity<PedidoViewComEntrega> detalhaPedido(@PathVariable Long id){
         var pedido = service.consultar(id);
-        return ResponseEntity.ok(new PedidoView(pedido));
+        return ResponseEntity.ok(new PedidoViewComEntrega(pedido));
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
-    public ResponseEntity<List<PedidoView>> listaPedidos(){
-        //TODO criar acesso admin
-        var clientes = service
+    public ResponseEntity<List<PedidoViewComEntrega>> listaPedidos(){
+        var pedidos = service
                 .listar()
                 .stream()
-                .map(PedidoView::new)
+                .map(PedidoViewComEntrega::new)
                 .toList();
 
-        return ResponseEntity.ok(clientes);
+        return ResponseEntity.ok(pedidos);
+    }
+
+    @GetMapping("/listar")
+    @ResponseStatus(HttpStatus.FOUND)
+    public ResponseEntity<List<PedidoViewComEntrega>> listaPedidosDeTodosClientes(){
+        var pedidos = service
+                .listarDeTodosClientes() //TODO criar paginação
+                .stream()
+                .map(PedidoViewComEntrega::new)
+                .toList();
+
+        return ResponseEntity.ok(pedidos);
     }
 
     @Transactional

@@ -7,9 +7,12 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 
 @Service
 public class TokenService {
@@ -54,4 +57,14 @@ public class TokenService {
         return Instant.now().plusSeconds(duration);
     }
 
+    public Long idUsuarioAutenticado(){
+        return (Long) ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
+                .getRequest()
+                .getAttribute("userId");
+    }
+
+    public void comparaComUserIdAutenticado(Long idParaVerificar){
+        if(!idUsuarioAutenticado().equals(idParaVerificar))
+            throw new RuntimeException("userID da request não confere");
+    }
 }

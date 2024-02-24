@@ -1,0 +1,8 @@
+FROM openjdk:17
+WORKDIR /app
+COPY  target/*.jar /app/app.jar
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-jar","app.jar"]
+
+# docker build -t acert-api -f Dockerfile-dev .

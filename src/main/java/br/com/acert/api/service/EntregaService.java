@@ -5,6 +5,7 @@ import br.com.acert.api.domain.entrega.EntregaFormAtualiza;
 import br.com.acert.api.domain.entrega.EntregaFormNovo;
 import br.com.acert.api.domain.entrega.EntregaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,35 +14,56 @@ import java.util.List;
 public class EntregaService {
 
     @Autowired
-    EntregaRepository repository;
+    private EntregaRepository repository;
 
     @Autowired
-    PedidoService pedidoService;
+    private PedidoService pedidoService;
 
-    public Entrega criar(EntregaFormNovo form){
+    @Autowired
+    private TokenService tokenService;
+
+    public Entrega criar(EntregaFormNovo form) {
         var pedido = pedidoService.consultar(form.pedidoId());
-
         return repository.save(new Entrega(pedido, form));
     }
 
-    public Entrega atualizar(EntregaFormAtualiza form){
-        return repository
-                .findById(form.id())
-                .orElseThrow()
-                .atualiza(form);
+    public Entrega atualizar(EntregaFormAtualiza form) {
+        var entrega = tentaBuscarEntrega(form.id());
+        return entrega.atualiza(form);
     }
 
-    public Entrega detalhar(Long id){
-        return repository
-                .findById(id)
-                .orElseThrow();
+    public Entrega buscar(Long id) {
+        return tentaBuscarEntrega(id);
     }
 
-    public void deletar(Long id){
-        repository.deleteById(id);
+    public void deletar(Long id) {
+        var entrega = tentaBuscarEntrega(id);
+        repository.delete(entrega);
     }
 
     public List<Entrega> listar() {
+        var userIdAutenticado = tokenService.idUsuarioAutenticado();
+        return repository
+                .findAll()
+                .stream()
+                .filter(entrega ->
+                        entrega.getPedido().getCliente().getId() == userIdAutenticado)
+                .toList();
+    }
+
+    private Entrega tentaBuscarEntrega(Long id) {
+        var entrega = repository
+                .findById(id)
+                .orElseThrow();
+
+        tokenService.comparaComUserIdAutenticado(entrega.getPedido().getCliente().getId());
+        return entrega;
+    }
+
+
+    //TODO aplicar paginação e filtro de StatusEntrega
+    @Secured("ROLE_ADMIN")
+    public List<Entrega> listarDeTodosClientes() {
         return repository.findAll();
     }
 }

@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 public record ClienteFormNovo(
         @NotBlank
         String nome,
-        @NotBlank @Email
+        @Email
         String login,
         @NotBlank
         String senha) {

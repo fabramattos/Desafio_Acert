@@ -34,9 +34,10 @@ public class SecurityConfig {
                         .antMatchers("/swagger-ui.html").permitAll()
 
                         .antMatchers(HttpMethod.POST,"/cliente").permitAll()
+                        .antMatchers(HttpMethod.GET, "/cliente/listar").hasAnyAuthority("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/pedido/listar").hasAnyAuthority("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/entrega/listar").hasAnyAuthority("ADMIN")
 
-                        .antMatchers(HttpMethod.GET, "/cliente").hasAnyAuthority("ADMIN")
-                        .antMatchers(HttpMethod.GET, "/pedido").hasAnyAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
