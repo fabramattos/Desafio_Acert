@@ -20,6 +20,7 @@ Este é um projeto simplificado para o controle de delivery de um restaurante, d
 - Permitir o cadastro, alteração, deleção e consulta de entregas. Uma entrega obrigatoriamente necessita estar vinculada a um pedido.
 
 ## Instruções para Execução
+ℹ️Informações sobre autenticação jwt e login  estarão disponíveis ao acessar o link do Swagger-UI da aplicaçãoℹ️
 ### Via Web:
 ⚠️servidor será desativado após avaliação⚠️
 
