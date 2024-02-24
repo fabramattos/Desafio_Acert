@@ -20,10 +20,23 @@ API RESTful
 - Permitir o cadastro, alteração, deleção e consulta de entregas. Uma entrega obrigatoriamente necessita estar vinculada a um pedido.
 
 ## Instruções para Execução
+### Via Web (servidor será desativado após avaliação)
+https://acert.up.railway.app/swagger-ui/index.html
+
 ### Localmente, sem Docker:
-1. Certifique-se de ter o Java 17 instalado em sua máquina: Java 17, PostgresSQL
+1. Certifique-se de ter instalado em sua máquina: Java 17, PostgresSQL
 2. No PostgreSQL, crie um banco de dados para a aplicação.
 3. Clone este repositório em seu ambiente local.
 4. Configure as credenciais do banco de dados no arquivo application.yml.
-5. Execute o comando mvn spring-boot:run na raiz do projeto para iniciar a aplicação.
+5. Execute o comando Maven ```mvn spring-boot:run```
 6. A API estará disponível no seguinte endereço: http://localhost:8080/swagger-ui.html
+
+
+### Localmente, com Docker:
+1. Certifique-se de ter instalado e em execução sua máquina: Docker
+2. Clone este repositório em seu ambiente local.
+3. Execute os seguintes comandos no terminal da IDE (na raiz do projeto):
+  - Maven: Gera o artefato ```mvn package```
+  - Docker: Utiliza o arquivo DockerFile-dev para gerar a imagem docker ```docker build -t acert-api -f Dockerfile-dev .```
+  - Docker: Utiliza o arquivo Docker-Compose para orquestrar os containers da API e do PostgresSQL ```docker-compose up```
+4. A API estará disponível no seguinte endereço: http://localhost:8080/swagger-ui.html
