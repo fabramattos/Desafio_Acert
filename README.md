@@ -21,7 +21,7 @@ Este é um projeto simplificado para o controle de delivery de um restaurante, d
 
 ## Instruções para Execução
 ### Via Web:
-!! servidor será desativado após avaliação !!
+⚠️servidor será desativado após avaliação⚠️
 
 https://acert.up.railway.app/swagger-ui/index.html
 ### Localmente, sem Docker:
@@ -34,7 +34,7 @@ https://acert.up.railway.app/swagger-ui/index.html
 
 
 ### Localmente, com Docker:
-!! dispensa configurações nos arquivos do projeto !!
+😎dispensa configurações nos arquivos do projeto😎
 1. Certifique-se de ter instalado e em execução na sua máquina: Docker, Java 17
 2. Clone este repositório em seu ambiente local.
 3. Execute os seguintes comandos no terminal da IDE (na raiz do projeto):
