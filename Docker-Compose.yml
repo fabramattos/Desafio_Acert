@@ -21,10 +21,12 @@ services:
       - compose-bridge
     ports:
       - "8080:8080"
+      - "5005:5005"
     environment:
       DB_HOST: database
       DB_PORT: 5432
       DB_DATABASE: DB_ACERT
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     depends_on:
       - database
 
