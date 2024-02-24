@@ -1,8 +1,8 @@
 # Controle de Delivery de Restaurante
 Este é um projeto simplificado para o controle de delivery de um restaurante, desenvolvido como parte do processo seletivo para a posição de Desenvolvedor Java Back-end.
 
-## Stack Obrigatória
-API RESTful
+## Stack Solicitada
+### API RESTful:
 - Java 17
 - Spring Boot 2.7.X
 - Banco de Dados PostgresSQL
@@ -10,13 +10,13 @@ API RESTful
 - OpenAPI 3.0 (Swagger)
 
 ## Funcionalidades
-### Segurança
+### Segurança:
 - Permitir o cadastro de usuários e login com autenticação via token JWT. Os métodos das APIs abaixo só poderão ser executados caso o usuário esteja logado.
-### Cliente
+### Cliente:
 - Permitir o cadastro, alteração, deleção e consulta de clientes.
-### Pedido
+### Pedido:
 - Permitir o cadastro, alteração, deleção e consulta de pedidos. Um pedido obrigatoriamente precisa ter um cliente e um cliente pode ter vários pedidos.
-### Entrega
+### Entrega:
 - Permitir o cadastro, alteração, deleção e consulta de entregas. Uma entrega obrigatoriamente necessita estar vinculada a um pedido.
 
 ## Instruções para Execução
