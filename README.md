@@ -32,11 +32,11 @@ https://acert.up.railway.app/swagger-ui/index.html
 6. A API estará disponível no seguinte endereço: http://localhost:8080/swagger-ui.html
 
 
-### Localmente, com Docker:
-1. Certifique-se de ter instalado e em execução sua máquina: Docker
+### Localmente, com Docker (dispensa configurações nos arquivos do projeto):
+1. Certifique-se de ter instalado e em execução na sua máquina: Docker, Java 17
 2. Clone este repositório em seu ambiente local.
 3. Execute os seguintes comandos no terminal da IDE (na raiz do projeto):
-  - Maven: Gera o artefato ```mvn package```
-  - Docker: Utiliza o arquivo DockerFile-dev para gerar a imagem docker ```docker build -t acert-api -f Dockerfile-dev .```
-  - Docker: Utiliza o arquivo Docker-Compose para orquestrar os containers da API e do PostgresSQL ```docker-compose up```
+  - Maven: ```mvn package``` (Gera o artefato)
+  - Docker: ```docker build -t acert-api -f Dockerfile-dev .``` (utiliza o arquivo DockerFile-dev para gerar a imagem docker)
+  - Docker: ```docker-compose up``` (utiliza o arquivo Docker-Compose para configurar e executar a API e o PostgresSQL)
 4. A API estará disponível no seguinte endereço: http://localhost:8080/swagger-ui.html
