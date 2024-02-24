@@ -21,9 +21,9 @@ Este é um projeto simplificado para o controle de delivery de um restaurante, d
 
 ## Instruções para Execução
 ### Via Web:
-https://acert.up.railway.app/swagger-ui/index.html
-Obs: (servidor será desativado após avaliação)
+!! servidor será desativado após avaliação !!
 
+https://acert.up.railway.app/swagger-ui/index.html
 ### Localmente, sem Docker:
 1. Certifique-se de ter instalado em sua máquina: Java 17, PostgresSQL
 2. No PostgreSQL, crie um banco de dados para a aplicação.
@@ -33,7 +33,8 @@ Obs: (servidor será desativado após avaliação)
 6. A API estará disponível no seguinte endereço: http://localhost:8080/swagger-ui.html
 
 
-### Localmente, com Docker (dispensa configurações nos arquivos do projeto):
+### Localmente, com Docker:
+!! dispensa configurações nos arquivos do projeto !!
 1. Certifique-se de ter instalado e em execução na sua máquina: Docker, Java 17
 2. Clone este repositório em seu ambiente local.
 3. Execute os seguintes comandos no terminal da IDE (na raiz do projeto):
