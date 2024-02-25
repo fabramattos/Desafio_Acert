@@ -5,7 +5,9 @@ import br.com.acert.api.domain.cliente.ClienteFormNovo;
 import br.com.acert.api.domain.cliente.ClienteViewCompleto;
 import br.com.acert.api.domain.cliente.ClienteViewSimples;
 import br.com.acert.api.service.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/cliente")
 @SecurityRequirement(name = "bearer-key")
+@Tag(name = "Cliente", description = "Operações relacionadas com Cliente.")
 public class ClienteController {
 
     @Autowired
@@ -26,6 +29,8 @@ public class ClienteController {
     @Transactional
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Cria um novo cliente")
+    @SecurityRequirement(name = "bearer-key", scopes = {})
     public ResponseEntity<ClienteViewSimples> criaCliente(@RequestBody @Valid ClienteFormNovo form,
                                                           UriComponentsBuilder uriBuilder) {
         var cliente = service.criar(form);
@@ -42,6 +47,7 @@ public class ClienteController {
     @Transactional
     @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(summary = "altera cliente")
     public ResponseEntity<ClienteViewSimples> alteraCliente(@RequestBody @Valid ClienteFormAtualiza form) {
         var cliente = service.alterarIdAutenticado(form);
         return ResponseEntity.ok(new ClienteViewSimples(cliente));
@@ -49,6 +55,7 @@ public class ClienteController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.FOUND)
+    @Operation(summary = "consulta dados do cliente, seus pedidos e entregas")
     public ResponseEntity<ClienteViewCompleto> detalhaClienteLogado() {
         var cliente = service.consultarIdAutenticado();
         return ResponseEntity.ok(new ClienteViewCompleto(cliente));
@@ -57,6 +64,7 @@ public class ClienteController {
     @Transactional
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Deleta cliente")
     public void deletaCliente() {
         service.deletarIdAutenticado();
     }
