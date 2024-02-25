@@ -5,7 +5,6 @@ import br.com.acert.api.domain.entrega.EntregaFormAtualiza;
 import br.com.acert.api.domain.entrega.EntregaFormNovo;
 import br.com.acert.api.domain.entrega.EntregaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,13 +13,13 @@ import java.util.List;
 public class EntregaService {
 
     @Autowired
-    private EntregaRepository repository;
+    EntregaRepository repository;
 
     @Autowired
-    private PedidoService pedidoService;
+    PedidoService pedidoService;
 
     @Autowired
-    private TokenService tokenService;
+    TokenService tokenService;
 
     public Entrega criar(EntregaFormNovo form) {
         var pedido = pedidoService.consultar(form.pedidoId());
@@ -58,12 +57,5 @@ public class EntregaService {
 
         tokenService.comparaComUserIdAutenticado(entrega.getPedido().getCliente().getId());
         return entrega;
-    }
-
-
-    //TODO aplicar paginação e filtro de StatusEntrega
-    @Secured("ROLE_ADMIN")
-    public List<Entrega> listarDeTodosClientes() {
-        return repository.findAll();
     }
 }

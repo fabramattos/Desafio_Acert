@@ -5,25 +5,22 @@ import br.com.acert.api.domain.cliente.ClienteFormAtualiza;
 import br.com.acert.api.domain.cliente.ClienteFormNovo;
 import br.com.acert.api.domain.cliente.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ClienteService implements UserDetailsService {
 
     @Autowired
-    private ClienteRepository repository;
+    ClienteRepository repository;
 
     @Autowired
-    private PasswordEncoder encoder;
+    PasswordEncoder encoder;
 
     @Autowired
-    private TokenService tokenService;
+    TokenService tokenService;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -52,10 +49,5 @@ public class ClienteService implements UserDetailsService {
         return repository
                 .findById(tokenService.idUsuarioAutenticado())
                 .orElseThrow();
-    }
-
-    @Secured("ROLE_ADMIN")
-    public List<Cliente> listar() {
-        return repository.findAll();
     }
 }

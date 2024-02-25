@@ -5,7 +5,6 @@ import br.com.acert.api.domain.pedido.PedidoFormAtualiza;
 import br.com.acert.api.domain.pedido.PedidoFormNovo;
 import br.com.acert.api.domain.pedido.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,11 +36,6 @@ public class PedidoService {
 
     public Pedido consultar(Long id) {
         return tentaBuscarPedido(id);
-    }
-
-    @Secured("ROLE_ADMIN")
-    public List<Pedido> listarDeTodosClientes() {
-        return repository.findAll();
     }
 
     public void deletar(Long id) {

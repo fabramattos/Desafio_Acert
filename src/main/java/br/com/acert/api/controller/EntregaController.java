@@ -55,18 +55,6 @@ public class EntregaController {
         return ResponseEntity.ok(entregas);
     }
 
-    @GetMapping("/listar")
-    @ResponseStatus(HttpStatus.FOUND)
-    public ResponseEntity<List<EntregaView>> listaEntregasTodosClientes(){
-        var entregas = service
-                .listarDeTodosClientes() //TODO aplicar paginação
-                .stream()
-                .map(EntregaView::new)
-                .toList();
-
-        return ResponseEntity.ok(entregas);
-    }
-
     @Transactional
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

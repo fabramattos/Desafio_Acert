@@ -14,7 +14,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/cliente")
@@ -53,18 +52,6 @@ public class ClienteController {
     public ResponseEntity<ClienteViewCompleto> detalhaClienteLogado() {
         var cliente = service.consultarIdAutenticado();
         return ResponseEntity.ok(new ClienteViewCompleto(cliente));
-    }
-
-    @GetMapping("/listar")
-    @ResponseStatus(HttpStatus.FOUND)
-    public ResponseEntity<List<ClienteViewSimples>> listaClientes() {
-        var clientes = service
-                .listar()
-                .stream()
-                .map(ClienteViewSimples::new)
-                .toList();
-
-        return ResponseEntity.ok(clientes);
     }
 
     @Transactional

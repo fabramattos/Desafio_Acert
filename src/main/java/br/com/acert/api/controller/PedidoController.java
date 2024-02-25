@@ -58,18 +58,6 @@ public class PedidoController {
         return ResponseEntity.ok(pedidos);
     }
 
-    @GetMapping("/listar")
-    @ResponseStatus(HttpStatus.FOUND)
-    public ResponseEntity<List<PedidoViewComEntrega>> listaPedidosDeTodosClientes(){
-        var pedidos = service
-                .listarDeTodosClientes() //TODO criar paginação
-                .stream()
-                .map(PedidoViewComEntrega::new)
-                .toList();
-
-        return ResponseEntity.ok(pedidos);
-    }
-
     @Transactional
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
