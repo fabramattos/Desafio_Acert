@@ -1,6 +1,8 @@
 package br.com.acert.api.service;
 
 import br.com.acert.api.domain.cliente.Cliente;
+import br.com.acert.api.infra.exception.TokenGeradoException;
+import br.com.acert.api.infra.exception.TokenInvalidoException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -34,7 +36,7 @@ public class TokenService {
                     .withExpiresAt(diasValidade(DIAS_EXPIRACAO))
                     .sign(algoritmo);
         } catch (JWTCreationException e) {
-            throw new RuntimeException("Erro ao gerar jwt");
+            throw new TokenGeradoException();
         }
     }
 
@@ -48,7 +50,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException e) {
-            throw new RuntimeException("JWT inválido ou expirado");
+            throw new TokenInvalidoException();
         }
     }
 
@@ -63,8 +65,8 @@ public class TokenService {
                 .getAttribute("userId");
     }
 
-    public void comparaComUserIdAutenticado(Long idParaVerificar){
+    public void comparaComUserIdAutenticado(Long idParaVerificar, RuntimeException e){
         if(!idUsuarioAutenticado().equals(idParaVerificar))
-            throw new RuntimeException("userID da request não confere");
+            throw e;
     }
 }

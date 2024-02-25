@@ -1,9 +1,8 @@
 package br.com.acert.api.service;
 
-import br.com.acert.api.domain.entrega.Entrega;
-import br.com.acert.api.domain.entrega.EntregaFormAtualiza;
-import br.com.acert.api.domain.entrega.EntregaFormNovo;
-import br.com.acert.api.domain.entrega.EntregaRepository;
+import br.com.acert.api.domain.entrega.*;
+import br.com.acert.api.infra.exception.EntregaEmAndamentoException;
+import br.com.acert.api.infra.exception.EntregaNaoEncontradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,9 +52,14 @@ public class EntregaService {
     private Entrega tentaBuscarEntrega(Long id) {
         var entrega = repository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(EntregaNaoEncontradaException::new);
 
-        tokenService.comparaComUserIdAutenticado(entrega.getPedido().getCliente().getId());
+        tokenService.comparaComUserIdAutenticado(entrega.getPedido().getCliente().getId(), new EntregaNaoEncontradaException());
         return entrega;
+    }
+
+    protected void verificaStatusEntrega(Entrega entrega) {
+        if(entrega != null && entrega.getStatus() != EntregaStatus.NAO_INICIADA)
+            throw new EntregaEmAndamentoException();
     }
 }

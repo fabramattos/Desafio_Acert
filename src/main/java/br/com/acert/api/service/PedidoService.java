@@ -4,6 +4,7 @@ import br.com.acert.api.domain.pedido.Pedido;
 import br.com.acert.api.domain.pedido.PedidoFormAtualiza;
 import br.com.acert.api.domain.pedido.PedidoFormNovo;
 import br.com.acert.api.domain.pedido.PedidoRepository;
+import br.com.acert.api.infra.exception.PedidoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class PedidoService {
 
     @Autowired
     ClienteService clienteService;
+
+    @Autowired
+    EntregaService entregaService;
 
     @Autowired
     PedidoRepository repository;
@@ -31,6 +35,7 @@ public class PedidoService {
 
     public Pedido alterar(PedidoFormAtualiza form) {
         var pedido = tentaBuscarPedido(form.pedidoId());
+        entregaService.verificaStatusEntrega(pedido.getEntrega());
         return pedido.atualiza(form);
     }
 
@@ -40,15 +45,17 @@ public class PedidoService {
 
     public void deletar(Long id) {
         var pedido = tentaBuscarPedido(id);
+        entregaService.verificaStatusEntrega(pedido.getEntrega());
+
         repository.delete(pedido);
     }
 
     private Pedido tentaBuscarPedido(Long id) {
         var pedido = repository
                 .findById(id)
-                .orElseThrow();
+                .orElseThrow(PedidoNaoEncontradoException::new);
 
-        tokenService.comparaComUserIdAutenticado(pedido.getCliente().getId());
+        tokenService.comparaComUserIdAutenticado(pedido.getCliente().getId(), new PedidoNaoEncontradoException());
 
         return pedido;
     }

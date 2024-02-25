@@ -1,7 +1,7 @@
 package br.com.acert.api.domain.entrega;
 
 public enum EntregaStatus {
-    SEM_INFORMACAO,
+    NAO_INICIADA,
     PREPARANDO,
     A_CAMINHO,
     ENTREGUE,
