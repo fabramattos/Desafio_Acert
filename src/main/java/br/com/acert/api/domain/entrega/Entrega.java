@@ -49,7 +49,7 @@ public class Entrega {
         this.logradouro = form.logradouro();
         this.numero = form.numero();
         this.complemento = form.complemento();
-        this.status = EntregaStatus.SEM_INFORMACAO;
+        this.status = EntregaStatus.NAO_INICIADA;
     }
 
     public Entrega atualiza(EntregaFormAtualiza form) {
@@ -68,7 +68,7 @@ public class Entrega {
         if (form.complemento() != null && !form.complemento().isBlank())
             this.complemento = form.complemento();
         if (form.statusEntrega() != null)
-            this.status = EntregaStatus.SEM_INFORMACAO;
+            this.status = EntregaStatus.NAO_INICIADA;
 
         return this;
     }
