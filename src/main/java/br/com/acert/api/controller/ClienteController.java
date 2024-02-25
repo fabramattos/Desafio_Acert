@@ -29,8 +29,8 @@ public class ClienteController {
     @Transactional
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Cria um novo cliente")
-    @SecurityRequirement(name = "bearer-key", scopes = {})
+    @Operation(summary = "Cria um novo cliente",
+            security = @SecurityRequirement(name = "", scopes = {}))
     public ResponseEntity<ClienteViewSimples> criaCliente(@RequestBody @Valid ClienteFormNovo form,
                                                           UriComponentsBuilder uriBuilder) {
         var cliente = service.criar(form);
