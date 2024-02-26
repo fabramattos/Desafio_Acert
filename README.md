@@ -19,6 +19,12 @@ Este é um projeto simplificado para o controle de delivery de um restaurante, d
 ### Entrega:
 - Permitir o cadastro, alteração, deleção e consulta de entregas. Uma entrega obrigatoriamente necessita estar vinculada a um pedido.
 
+### Obs sobre Deleção:
+Ao deletar um usuário, verificações são feitas. Usuários e pedidos só podem ser deletados se não houver entrega em andamento.
+Caso delete usuário, todos dados atrelados são deletados.
+Caso delete pedido, entrega é deletada.
+Caso delete entrega, pedido fica desassociado de uma entrega.
+
 ## Instruções para Execução
 ℹ️Informações sobre autenticação jwt e login  estarão disponíveis ao acessar o link do Swagger-UI da aplicaçãoℹ️
 ### Via Web:
