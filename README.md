@@ -49,3 +49,15 @@ https://acert.up.railway.app/swagger-ui/index.html
   - Docker: ```docker build -t acert-api -f Dockerfile-dev .``` (utiliza o arquivo DockerFile-dev para gerar a imagem docker)
   - Docker: ```docker-compose up``` (utiliza o arquivo Docker-Compose para configurar e executar a API e o PostgresSQL)
 4. A API estará disponível no seguinte endereço: http://localhost:8080/swagger-ui.html
+
+
+## Melhorias futuras:
+Projeto focado no MVP devido trabalho para avaliação e tempo disponível.
+Algumas ideias anotadas para implementação futura:
+### No app
+- Testes para os Controllers com mockMvc.
+- criação de arquitetura para "Itens", substituindo uma descrição por um controle de estoque, com adição de itens, remoção, calculo de preço do pedido.
+- Controle por Role para permitir um admin registrar itens no estoque.
+  
+### CI/CD
+- realizar testes durante package do github actions (não está reconhecendo/conectando ao container no momento)
