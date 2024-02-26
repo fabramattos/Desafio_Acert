@@ -109,6 +109,15 @@
                     <mainClass>br.com.acert.api.Application</mainClass>
                 </configuration>
             </plugin>
+
+            <plugin>
+<!--                Para evitar testes em paralelo, problemas com repositorios/services-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <parallel>none</parallel>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
