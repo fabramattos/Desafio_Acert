@@ -1,5 +1,6 @@
 package br.com.acert.api.service;
 
+import br.com.acert.api.domain.cliente.Cliente;
 import br.com.acert.api.domain.pedido.Pedido;
 import br.com.acert.api.domain.pedido.PedidoFormAtualiza;
 import br.com.acert.api.domain.pedido.PedidoFormNovo;
@@ -30,6 +31,12 @@ public class PedidoService {
         var pedido = new Pedido(cliente, form.descricao());
         cliente.getPedidos().add(pedido);
 
+        return repository.save(pedido);
+    }
+
+    public Pedido criarDuranteInicializacaoDoBanco(Cliente cliente, String descricao) {
+        var pedido = new Pedido(cliente, descricao);
+        cliente.getPedidos().add(pedido);
         return repository.save(pedido);
     }
 

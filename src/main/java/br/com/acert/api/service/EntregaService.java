@@ -4,6 +4,7 @@ import br.com.acert.api.domain.entrega.Entrega;
 import br.com.acert.api.domain.entrega.EntregaFormAtualiza;
 import br.com.acert.api.domain.entrega.EntregaFormNovo;
 import br.com.acert.api.domain.entrega.EntregaRepository;
+import br.com.acert.api.domain.pedido.Pedido;
 import br.com.acert.api.infra.exception.EntregaNaoEncontradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,10 @@ public class EntregaService {
 
     public Entrega criar(EntregaFormNovo form) {
         var pedido = pedidoService.consultar(form.pedidoId());
+        return repository.save(new Entrega(pedido, form));
+    }
+
+    public Entrega criarDuranteInicializacaoDoBanco(Pedido pedido, EntregaFormNovo form) {
         return repository.save(new Entrega(pedido, form));
     }
 
