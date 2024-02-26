@@ -27,13 +27,12 @@ jobs:
       - name: Maven Build
         run: mvn compile
 
-#      - name: Maven Build sem testes
-#        run: |
-#          mvn clean package -DskipTests=true
-          
+      - name: Maven Build sem testes
+        run: |
+          mvn clean package -DskipTests=true
 
-      - name: Maven Package
-        run: mvn package
+#      - name: Maven Package
+#        run: mvn package
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
