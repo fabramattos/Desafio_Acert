@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -58,4 +59,12 @@ public class TratadorDeErros {
                 .badRequest()
                 .body(new ExceptionView(e.getLocalizedMessage()));
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    ResponseEntity<ExceptionView> tratarValidacaoDeArgumentos(MethodArgumentNotValidException e){
+        return ResponseEntity
+                .badRequest()
+                .body(new ExceptionView(e.getLocalizedMessage()));
+    }
+
 }
