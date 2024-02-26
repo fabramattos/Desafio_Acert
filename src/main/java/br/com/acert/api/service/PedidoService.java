@@ -1,6 +1,5 @@
 package br.com.acert.api.service;
 
-import br.com.acert.api.domain.cliente.Cliente;
 import br.com.acert.api.domain.pedido.Pedido;
 import br.com.acert.api.domain.pedido.PedidoFormAtualiza;
 import br.com.acert.api.domain.pedido.PedidoFormNovo;
@@ -9,6 +8,7 @@ import br.com.acert.api.infra.exception.PedidoNaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -23,57 +23,48 @@ public class PedidoService {
     @Autowired
     PedidoRepository repository;
 
-    @Autowired
-    TokenService tokenService;
-
-    public Pedido criar(PedidoFormNovo form) {
-        var cliente = clienteService.consultarIdAutenticado();
+    @Transactional
+    public Pedido criar(Long userId, PedidoFormNovo form) {
+        var cliente = clienteService.buscar(userId);
         var pedido = new Pedido(cliente, form.descricao());
         cliente.getPedidos().add(pedido);
 
         return repository.save(pedido);
     }
 
-    public Pedido criarDuranteInicializacaoDoBanco(Cliente cliente, String descricao) {
-        var pedido = new Pedido(cliente, descricao);
-        cliente.getPedidos().add(pedido);
-        return repository.save(pedido);
-    }
-
-    public Pedido alterar(PedidoFormAtualiza form) {
-        var pedido = tentaBuscarPedido(form.pedidoId());
+    @Transactional
+    public Pedido alterar(Long userId, PedidoFormAtualiza form) {
+        var pedido = buscar(userId, form.pedidoId());
         entregaUtils.verificaStatusEntrega(pedido.getEntrega());
         return pedido.atualiza(form);
     }
 
-    public Pedido consultar(Long id) {
-        return tentaBuscarPedido(id);
-    }
 
-    public void deletar(Long id) {
-        var pedido = tentaBuscarPedido(id);
+    @Transactional
+    public void deletar(Long userId, Long pedidoId) {
+        var pedido = buscar(userId, pedidoId);
         entregaUtils.verificaStatusEntrega(pedido.getEntrega());
-
         repository.delete(pedido);
     }
 
-    private Pedido tentaBuscarPedido(Long id) {
+    public Pedido buscar(Long userId, Long pedidoId) {
         var pedido = repository
-                .findById(id)
+                .findById(pedidoId)
                 .orElseThrow(PedidoNaoEncontradoException::new);
 
-        tokenService.comparaComUserIdAutenticado(pedido.getCliente().getId(), new PedidoNaoEncontradoException());
+        if(pedido.getCliente().getId() != userId)
+            throw new PedidoNaoEncontradoException();
 
         return pedido;
+
     }
 
     //TODO implementar paginação
-    public List<Pedido> listar() {
-        var userIdAutenticado = tokenService.idUsuarioAutenticado();
+    public List<Pedido> listar(Long userId) {
         return repository
                 .findAll()
                 .stream()
-                .filter(pedido -> pedido.getCliente().getId() == userIdAutenticado)
+                .filter(pedido -> pedido.getCliente().getId() == userId)
                 .toList();
     }
 }

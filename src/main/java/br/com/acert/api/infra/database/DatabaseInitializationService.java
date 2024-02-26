@@ -1,11 +1,11 @@
 package br.com.acert.api.infra.database;
 
+import br.com.acert.api.domain.cliente.Cliente;
 import br.com.acert.api.domain.cliente.ClienteFormNovo;
 import br.com.acert.api.domain.cliente.ClienteRepository;
-import br.com.acert.api.domain.entrega.EntregaFormAtualiza;
 import br.com.acert.api.domain.entrega.EntregaFormNovo;
 import br.com.acert.api.domain.entrega.EntregaRepository;
-import br.com.acert.api.domain.entrega.EntregaStatus;
+import br.com.acert.api.domain.pedido.PedidoFormNovo;
 import br.com.acert.api.domain.pedido.PedidoRepository;
 import br.com.acert.api.service.ClienteService;
 import br.com.acert.api.service.EntregaService;
@@ -43,7 +43,7 @@ public class DatabaseInitializationService {
     @PostConstruct
     public void inicializaDatabase() {
         removeDados();
-        preencheDados();
+        criaUsuarioSemEntrega();
     }
 
     private void removeDados() {
@@ -52,15 +52,15 @@ public class DatabaseInitializationService {
         clienteRepository.deleteAll();
     }
 
-    private void preencheDados() {
+    private Cliente criaUsuarioSemEntrega(){
         var clienteSalvo = clienteService.criar(new ClienteFormNovo(
                 "Melon Husk",
                 "user@email.com",
                 "123456"));
 
-        var pedidoSalvo = pedidoService.criarDuranteInicializacaoDoBanco(clienteSalvo, "pedido teste");
-        entregaService.criarDuranteInicializacaoDoBanco(
-                pedidoSalvo,
+        var pedidoSalvo = pedidoService.criar(clienteSalvo.getId(), new PedidoFormNovo("pedido teste"));
+        entregaService.criar(
+                clienteSalvo.getId(),
                 new EntregaFormNovo(
                         pedidoSalvo.getId(),
                         "SP",
@@ -71,29 +71,6 @@ public class DatabaseInitializationService {
                         42,
                         null));
 
-        var pedidoDoisSalvo = pedidoService.criarDuranteInicializacaoDoBanco(clienteSalvo,"pedido com entrega em andamento");
-        var entregaDoisSalva = entregaService.criarDuranteInicializacaoDoBanco(
-                pedidoDoisSalvo,
-                new EntregaFormNovo(
-                pedidoDoisSalvo.getId(),
-                "SP",
-                "São Paulo",
-                "12345678",
-                "Bairro Estranho",
-                "rua estranha",
-                42,
-                null));
-
-        var entregaAlterada = entregaDoisSalva.atualiza(new EntregaFormAtualiza(
-                entregaDoisSalva.getId(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                EntregaStatus.A_CAMINHO));
-        entregaRepository.save(entregaAlterada);
+        return clienteSalvo;
     }
 }

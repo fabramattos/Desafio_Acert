@@ -1,7 +1,6 @@
 package br.com.acert.api.infra.security;
 
 import br.com.acert.api.domain.cliente.ClienteRepository;
-import br.com.acert.api.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +20,7 @@ import java.io.IOException;
 public class TokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    private TokenService tokenService;
+    private TokenUtils tokenUtils;
 
     @Autowired
     private ClienteRepository repository;
@@ -31,23 +30,17 @@ public class TokenFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        var token = recuperaToken(request);
+        var token = tokenUtils.recuperaToken(request);
         if(token != null) {
-            var subject = tokenService.getSubject(token);
+            var subject = tokenUtils.getSubject(token);
             var usuario = repository.findByLogin(subject).orElseThrow();
             var tokenAuthentication = new UsernamePasswordAuthenticationToken(usuario, null, null);
 
             SecurityContextHolder.getContext().setAuthentication(tokenAuthentication);
-            request.setAttribute("userId", usuario.getId());
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private String recuperaToken(HttpServletRequest req) {
-        var authHeader = req.getHeader("Authorization");
-        if(authHeader != null)
-            return authHeader.replace("Bearer ", "");
-        return null;
-    }
+
 }

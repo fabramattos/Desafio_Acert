@@ -27,12 +27,12 @@ public class SwaggerConfig {
                                         + "=========================================================================<br>"
                                         + "<br>"
                                         + "Sistema simplificado para o controle de delivery de restaurante<br>"
-                                        + "Acesso controlado por token e permissões de usuário.<br>"
+                                        + "Acesso controlado por JWT.<br>"
                                         + "<br>"
                                         + "Para login e gerar o token JWT, utilize:<br>"
-                                        + "- usuário: admin@email.com | senha: 123456<br>"
                                         + "- usuário: user@email.com  | senha: 123456<br>"
                                         + "<br>"
+                                        + "Crie seu próprio usuário se desejar."
                                         + "========================================================================="
                                         + "</pre>")
 

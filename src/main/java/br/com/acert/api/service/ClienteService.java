@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class ClienteService implements UserDetailsService {
 
@@ -19,9 +21,6 @@ public class ClienteService implements UserDetailsService {
 
     @Autowired
     PasswordEncoder encoder;
-
-    @Autowired
-    TokenService tokenService;
 
     @Autowired
     EntregaUtils entregaUtils;
@@ -33,18 +32,21 @@ public class ClienteService implements UserDetailsService {
                 .orElseThrow();
     }
 
+    @Transactional
     public Cliente criar(ClienteFormNovo form) {
         var formCodificado = new ClienteFormNovo(form.nome(), form.login(), encoder.encode(form.senha()));
         return repository.save(new Cliente(formCodificado));
     }
 
-    public Cliente alterarIdAutenticado(ClienteFormAtualiza form) {
-        return consultarIdAutenticado()
+    @Transactional
+    public Cliente alterar(Long userId, ClienteFormAtualiza form) {
+        return buscar(userId)
                 .atualiza(form);
     }
 
-    public void deletarIdAutenticado() {
-        var cliente = consultarIdAutenticado();
+    @Transactional
+    public void deletar(Long userId) {
+        var cliente = buscar(userId);
         var pedidos = cliente.getPedidos();
 
         pedidos.forEach(pedido -> {
@@ -52,12 +54,12 @@ public class ClienteService implements UserDetailsService {
             entregaUtils.verificaStatusEntrega(entrega);
         });
 
-        repository.delete(cliente);
+        repository.deleteById(userId);
     }
 
-    public Cliente consultarIdAutenticado() {
+    public Cliente buscar(Long userId) {
         return repository
-                .findById(tokenService.idUsuarioAutenticado())
+                .findById(userId)
                 .orElseThrow(ClienteNaoEncontradoException::new);
     }
 }

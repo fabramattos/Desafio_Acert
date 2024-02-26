@@ -4,11 +4,11 @@ import br.com.acert.api.domain.entrega.Entrega;
 import br.com.acert.api.domain.entrega.EntregaFormAtualiza;
 import br.com.acert.api.domain.entrega.EntregaFormNovo;
 import br.com.acert.api.domain.entrega.EntregaRepository;
-import br.com.acert.api.domain.pedido.Pedido;
 import br.com.acert.api.infra.exception.EntregaNaoEncontradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -21,52 +21,45 @@ public class EntregaService {
     PedidoService pedidoService;
 
     @Autowired
-    TokenService tokenService;
-
-    @Autowired
     EntregaUtils entregaUtils;
 
-    public Entrega criar(EntregaFormNovo form) {
-        var pedido = pedidoService.consultar(form.pedidoId());
+    @Transactional
+    public Entrega criar(Long userId, EntregaFormNovo form) {
+        var pedido = pedidoService.buscar(userId, form.pedidoId());
         return repository.save(new Entrega(pedido, form));
     }
 
-    public Entrega criarDuranteInicializacaoDoBanco(Pedido pedido, EntregaFormNovo form) {
-        return repository.save(new Entrega(pedido, form));
-    }
-
-    public Entrega atualizar(EntregaFormAtualiza form) {
-        var entrega = tentaBuscarEntrega(form.id());
+    @Transactional
+    public Entrega atualizar(Long userId, EntregaFormAtualiza form) {
+        var entrega = buscar(userId, form.id());
         return entrega.atualiza(form);
     }
 
-    public Entrega buscar(Long id) {
-        return tentaBuscarEntrega(id);
-    }
-
-    public void deletar(Long id) {
-        var entrega = tentaBuscarEntrega(id);
+    @Transactional
+    public void deletar(Long userId, Long entregaId) {
+        var entrega = buscar(userId, entregaId);
         entregaUtils.verificaStatusEntrega(entrega);
         entrega.getPedido().removeEntrega();
         repository.delete(entrega);
     }
 
-    public List<Entrega> listar() {
-        var userIdAutenticado = tokenService.idUsuarioAutenticado();
+    public List<Entrega> listar(Long userId) {
         return repository
                 .findAll()
                 .stream()
                 .filter(entrega ->
-                        entrega.getPedido().getCliente().getId() == userIdAutenticado)
+                        entrega.getPedido().getCliente().getId() == userId)
                 .toList();
     }
 
-    private Entrega tentaBuscarEntrega(Long id) {
+    public Entrega buscar(Long userId, Long entregaId) {
         var entrega = repository
-                .findById(id)
+                .findById(entregaId)
                 .orElseThrow(EntregaNaoEncontradaException::new);
 
-        tokenService.comparaComUserIdAutenticado(entrega.getPedido().getCliente().getId(), new EntregaNaoEncontradaException());
+        if(entrega.getPedido().getCliente().getId() != userId)
+            throw new EntregaNaoEncontradaException();
+
         return entrega;
     }
 
