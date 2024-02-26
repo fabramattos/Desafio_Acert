@@ -55,6 +55,7 @@ https://acert.up.railway.app/swagger-ui/index.html
 Projeto focado no MVP devido trabalho para avaliação e tempo disponível.
 Algumas ideias anotadas para implementação futura:
 ### No app
+- Melhor refinamento para tratar as exception devido as Validations, mostrando mensagem de erro mais coesa para o front-end
 - Testes para os Controllers com mockMvc.
 - criação de arquitetura para "Itens", substituindo uma descrição por um controle de estoque, com adição de itens, remoção, calculo de preço do pedido.
 - Controle por Role para permitir um admin registrar itens no estoque.
