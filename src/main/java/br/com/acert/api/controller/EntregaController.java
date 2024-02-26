@@ -7,7 +7,6 @@ import br.com.acert.api.domain.entrega.EntregaViewSimples;
 import br.com.acert.api.infra.security.TokenUtils;
 import br.com.acert.api.service.EntregaService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
