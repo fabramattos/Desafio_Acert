@@ -1,10 +1,12 @@
 package br.com.acert.api.domain.entrega;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
 public record EntregaFormAtualiza(
-        @NotNull
+        @NotNull @Schema(required = true)
         Long id,
         String UF,
         String cidade,
