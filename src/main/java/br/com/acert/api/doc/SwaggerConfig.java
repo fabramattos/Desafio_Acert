@@ -32,7 +32,7 @@ public class SwaggerConfig {
                                         + "Para login e gerar o token JWT, utilize:<br>"
                                         + "- usuário: user@email.com  | senha: 123456<br>"
                                         + "<br>"
-                                        + "Crie seu próprio usuário se desejar."
+                                        + "Crie seu próprio usuário se desejar.<br>"
                                         + "========================================================================="
                                         + "</pre>")
 
