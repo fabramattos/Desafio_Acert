@@ -1,7 +1,9 @@
 package br.com.acert.api.service;
 
-import br.com.acert.api.domain.entrega.*;
-import br.com.acert.api.infra.exception.EntregaEmAndamentoException;
+import br.com.acert.api.domain.entrega.Entrega;
+import br.com.acert.api.domain.entrega.EntregaFormAtualiza;
+import br.com.acert.api.domain.entrega.EntregaFormNovo;
+import br.com.acert.api.domain.entrega.EntregaRepository;
 import br.com.acert.api.infra.exception.EntregaNaoEncontradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class EntregaService {
     @Autowired
     TokenService tokenService;
 
+    @Autowired
+    EntregaUtils entregaUtils;
+
     public Entrega criar(EntregaFormNovo form) {
         var pedido = pedidoService.consultar(form.pedidoId());
         return repository.save(new Entrega(pedido, form));
@@ -36,6 +41,8 @@ public class EntregaService {
 
     public void deletar(Long id) {
         var entrega = tentaBuscarEntrega(id);
+        entregaUtils.verificaStatusEntrega(entrega);
+        entrega.getPedido().removeEntrega();
         repository.delete(entrega);
     }
 
@@ -58,8 +65,4 @@ public class EntregaService {
         return entrega;
     }
 
-    protected void verificaStatusEntrega(Entrega entrega) {
-        if(entrega != null && entrega.getStatus() != EntregaStatus.NAO_INICIADA)
-            throw new EntregaEmAndamentoException();
-    }
 }

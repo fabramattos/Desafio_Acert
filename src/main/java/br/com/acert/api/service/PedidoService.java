@@ -17,7 +17,7 @@ public class PedidoService {
     ClienteService clienteService;
 
     @Autowired
-    EntregaService entregaService;
+    EntregaUtils entregaUtils;
 
     @Autowired
     PedidoRepository repository;
@@ -35,7 +35,7 @@ public class PedidoService {
 
     public Pedido alterar(PedidoFormAtualiza form) {
         var pedido = tentaBuscarPedido(form.pedidoId());
-        entregaService.verificaStatusEntrega(pedido.getEntrega());
+        entregaUtils.verificaStatusEntrega(pedido.getEntrega());
         return pedido.atualiza(form);
     }
 
@@ -45,7 +45,7 @@ public class PedidoService {
 
     public void deletar(Long id) {
         var pedido = tentaBuscarPedido(id);
-        entregaService.verificaStatusEntrega(pedido.getEntrega());
+        entregaUtils.verificaStatusEntrega(pedido.getEntrega());
 
         repository.delete(pedido);
     }

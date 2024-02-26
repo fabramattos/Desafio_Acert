@@ -5,7 +5,6 @@ import br.com.acert.api.domain.cliente.ClienteFormAtualiza;
 import br.com.acert.api.domain.cliente.ClienteFormNovo;
 import br.com.acert.api.domain.cliente.ClienteRepository;
 import br.com.acert.api.infra.exception.ClienteNaoEncontradoException;
-import br.com.acert.api.infra.exception.LoginException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,8 +16,6 @@ public class ClienteService implements UserDetailsService {
 
     @Autowired
     ClienteRepository repository;
-    @Autowired
-    EntregaService entregaService;
 
     @Autowired
     PasswordEncoder encoder;
@@ -26,11 +23,14 @@ public class ClienteService implements UserDetailsService {
     @Autowired
     TokenService tokenService;
 
+    @Autowired
+    EntregaUtils entregaUtils;
+
     @Override
     public UserDetails loadUserByUsername(String username) {
         return repository
                 .findByLogin(username)
-                .orElseThrow(LoginException::new);
+                .orElseThrow();
     }
 
     public Cliente criar(ClienteFormNovo form) {
@@ -49,7 +49,7 @@ public class ClienteService implements UserDetailsService {
 
         pedidos.forEach(pedido -> {
             var entrega = pedido.getEntrega();
-            entregaService.verificaStatusEntrega(entrega);
+            entregaUtils.verificaStatusEntrega(entrega);
         });
 
         repository.delete(cliente);

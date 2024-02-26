@@ -42,6 +42,10 @@ public class Pedido {
         descricao = form.descricao();
         return this;
     }
+
+    public void removeEntrega() {
+        entrega = null;
+    }
 }
 
 

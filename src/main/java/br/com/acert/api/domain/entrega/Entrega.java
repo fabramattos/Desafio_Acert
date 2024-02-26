@@ -35,7 +35,7 @@ public class Entrega {
     @Column(nullable = false)
     private EntregaStatus status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JsonIgnore
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
@@ -68,7 +68,7 @@ public class Entrega {
         if (form.complemento() != null && !form.complemento().isBlank())
             this.complemento = form.complemento();
         if (form.statusEntrega() != null)
-            this.status = EntregaStatus.NAO_INICIADA;
+            this.status = form.statusEntrega();
 
         return this;
     }
