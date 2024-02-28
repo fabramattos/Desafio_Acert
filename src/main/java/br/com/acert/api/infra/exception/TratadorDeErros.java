@@ -60,6 +60,13 @@ public class TratadorDeErros {
                 .body(new ExceptionView(e.getLocalizedMessage()));
     }
 
+    @ExceptionHandler(EntregaExistenteException.class)
+    ResponseEntity<ExceptionView> tratarEntregaExistente(EntregaExistenteException e){
+        return ResponseEntity
+                .badRequest()
+                .body(new ExceptionView(e.getLocalizedMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ExceptionView> tratarValidacaoDeArgumentos(MethodArgumentNotValidException e){
         return ResponseEntity

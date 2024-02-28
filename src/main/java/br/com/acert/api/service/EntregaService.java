@@ -4,6 +4,7 @@ import br.com.acert.api.domain.entrega.Entrega;
 import br.com.acert.api.domain.entrega.EntregaFormAtualiza;
 import br.com.acert.api.domain.entrega.EntregaFormNovo;
 import br.com.acert.api.domain.entrega.EntregaRepository;
+import br.com.acert.api.infra.exception.EntregaExistenteException;
 import br.com.acert.api.infra.exception.EntregaNaoEncontradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class EntregaService {
     @Transactional
     public Entrega criar(Long userId, EntregaFormNovo form) {
         var pedido = pedidoService.buscar(userId, form.pedidoId());
+        if(pedido.getEntrega() != null)
+            throw new EntregaExistenteException();
+
         return repository.save(new Entrega(pedido, form));
     }
 

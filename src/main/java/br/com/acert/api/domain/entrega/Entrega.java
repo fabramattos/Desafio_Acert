@@ -16,7 +16,7 @@ import javax.validation.constraints.Digits;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Entrega {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 2)
     private String UF;

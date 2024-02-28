@@ -16,7 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Pedido {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
@@ -25,7 +25,7 @@ public class Pedido {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Entrega entrega;
 
