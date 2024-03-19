@@ -10,20 +10,21 @@ import br.com.acert.api.domain.pedido.PedidoRepository;
 import br.com.acert.api.service.ClienteService;
 import br.com.acert.api.service.EntregaService;
 import br.com.acert.api.service.PedidoService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 
 @Component
 public class DatabaseInitializationService {
-
-    private ClienteRepository clienteRepository;
-    private EntregaRepository entregaRepository;
-    private PedidoRepository pedidoRepository;
-    private ClienteService clienteService;
-    private PedidoService pedidoService;
-    private EntregaService entregaService;
+    @Value("${spring.datasource.init:true}")
+    private boolean databaseInit;
+    private final ClienteRepository clienteRepository;
+    private final EntregaRepository entregaRepository;
+    private final PedidoRepository pedidoRepository;
+    private final ClienteService clienteService;
+    private final PedidoService pedidoService;
+    private final EntregaService entregaService;
 
     @Autowired
     public DatabaseInitializationService(ClienteRepository clienteRepository,
@@ -42,8 +43,10 @@ public class DatabaseInitializationService {
 
     @PostConstruct
     public void inicializaDatabase() {
-        removeDados();
-        criaUsuarioSemEntrega();
+        if (databaseInit) {
+            removeDados();
+            criaUsuarioSemEntrega();
+        }
     }
 
     private void removeDados() {
@@ -52,7 +55,7 @@ public class DatabaseInitializationService {
         clienteRepository.deleteAll();
     }
 
-    private Cliente criaUsuarioSemEntrega(){
+    private Cliente criaUsuarioSemEntrega() {
         var clienteSalvo = clienteService.criar(new ClienteFormNovo(
                 "Melon Husk",
                 "user@email.com",

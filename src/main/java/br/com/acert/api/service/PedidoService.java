@@ -5,10 +5,10 @@ import br.com.acert.api.domain.pedido.PedidoFormAtualiza;
 import br.com.acert.api.domain.pedido.PedidoFormNovo;
 import br.com.acert.api.domain.pedido.PedidoRepository;
 import br.com.acert.api.infra.exception.PedidoNaoEncontradoException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -44,6 +44,8 @@ public class PedidoService {
     public void deletar(Long userId, Long pedidoId) {
         var pedido = buscar(userId, pedidoId);
         entregaUtils.verificaStatusEntrega(pedido.getEntrega());
+
+        pedido.getCliente().getPedidos().remove(pedido);
         repository.delete(pedido);
     }
 

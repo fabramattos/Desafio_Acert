@@ -3,12 +3,12 @@ package br.com.acert.api.domain.pedido;
 import br.com.acert.api.domain.cliente.Cliente;
 import br.com.acert.api.domain.entrega.Entrega;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 
 @Entity(name = "Pedido")
 @Getter
@@ -27,6 +27,7 @@ public class Pedido {
 
     @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @JoinColumn(name = "entrega_id")
     private Entrega entrega;
 
     @Column(nullable = false)
@@ -43,8 +44,9 @@ public class Pedido {
         return this;
     }
 
-    public void removeEntrega() {
-        entrega = null;
+    public Pedido setEntrega(Entrega entrega){
+        this.entrega = entrega;
+        return this;
     }
 }
 

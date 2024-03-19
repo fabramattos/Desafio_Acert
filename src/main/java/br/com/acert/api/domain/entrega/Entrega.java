@@ -1,14 +1,13 @@
 package br.com.acert.api.domain.entrega;
 
 import br.com.acert.api.domain.pedido.Pedido;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import javax.validation.constraints.Digits;
 
 @Entity(name = "Entrega")
 @Getter
@@ -36,7 +35,6 @@ public class Entrega {
     private EntregaStatus status;
 
     @OneToOne
-    @JsonIgnore
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
@@ -71,5 +69,9 @@ public class Entrega {
             this.status = form.statusEntrega();
 
         return this;
+    }
+
+    public void removePedido() {
+        pedido = null;
     }
 }

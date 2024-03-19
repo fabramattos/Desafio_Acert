@@ -6,10 +6,10 @@ import br.com.acert.api.domain.entrega.EntregaFormNovo;
 import br.com.acert.api.domain.entrega.EntregaRepository;
 import br.com.acert.api.infra.exception.EntregaExistenteException;
 import br.com.acert.api.infra.exception.EntregaNaoEncontradaException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -30,7 +30,10 @@ public class EntregaService {
         if(pedido.getEntrega() != null)
             throw new EntregaExistenteException();
 
-        return repository.save(new Entrega(pedido, form));
+        var entrega = new Entrega(pedido, form);
+        pedido.setEntrega(entrega);
+
+        return repository.save(entrega);
     }
 
     @Transactional
@@ -43,7 +46,7 @@ public class EntregaService {
     public void deletar(Long userId, Long entregaId) {
         var entrega = buscar(userId, entregaId);
         entregaUtils.verificaStatusEntrega(entrega);
-        entrega.getPedido().removeEntrega();
+        entrega.getPedido().setEntrega(null);
         repository.delete(entrega);
     }
 
