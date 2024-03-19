@@ -37,9 +37,6 @@ class PedidoServiceTest extends DatabaseContainerConfig {
 
     @BeforeEach
     void criaClienteForm() {
-        entregaRepository.deleteAll();
-        pedidoRepository.deleteAll();
-        clienteRepository.deleteAll();
         cliente = clienteService.criar(new ClienteFormNovo("Xablau", "xablau@email.com", "senhaFraca"));
     }
 
@@ -76,8 +73,6 @@ class PedidoServiceTest extends DatabaseContainerConfig {
 
     }
 
-    //TODO funcionando no swagger e teste via controller, não propagando Cascade.All no teste do service
-    /*
     @Test
     @DisplayName("Dado um pedidoId válido, Quando solicitar deletar pedido e não houver entregas em andamento," +
             " Deve deletar o pedido e entrega associada")
@@ -103,7 +98,7 @@ class PedidoServiceTest extends DatabaseContainerConfig {
         assertTrue(pedidoRepository.findAll().isEmpty());
         assertTrue(entregaRepository.findAll().isEmpty());
     }
-*/
+
     @Test
     @DisplayName("Dado um ID, deve retornar o pedido correto e seus dados.")
     void consultar() {

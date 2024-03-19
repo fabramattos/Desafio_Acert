@@ -13,12 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,9 +36,6 @@ class ClienteServiceTest extends DatabaseContainerConfig {
 
     @BeforeEach
     void criaClienteForm() {
-        entregaRepository.deleteAll();
-        pedidoRepository.deleteAll();
-        clienteRepository.deleteAll();
         clienteFormNovo = new ClienteFormNovo("Xablau", "xablau@email.com", "senhaFraca");
     }
 
@@ -81,7 +72,7 @@ class ClienteServiceTest extends DatabaseContainerConfig {
 
     //TODO funcionando no swagger e teste via controller, não propagando Cascade.All no teste do service
 
-    /*
+
     @Test
     @DisplayName("Dado um userId válido, Quando solicitar deletar cadastro e não houver entregas em andamento," +
             " Deve deletar o cadastro e dados associados")
@@ -111,7 +102,7 @@ class ClienteServiceTest extends DatabaseContainerConfig {
         assertTrue(entregaRepository.findAll().isEmpty());
     }
 
-*/
+
     @Test
     @DisplayName("Dado um ID, deve retornar o cliente correto e seus dados.")
     void consultar() {
