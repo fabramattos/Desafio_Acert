@@ -70,8 +70,6 @@ class ClienteServiceTest extends DatabaseContainerConfig {
 
     }
 
-    //TODO funcionando no swagger e teste via controller, não propagando Cascade.All no teste do service
-
 
     @Test
     @DisplayName("Dado um userId válido, Quando solicitar deletar cadastro e não houver entregas em andamento," +

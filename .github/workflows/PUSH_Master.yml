@@ -21,17 +21,11 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      - name: Maven Clean
-        run: mvn clean
-
-      - name: Maven Build
-        run: mvn compile
-
 #      - name: Maven Build sem testes
 #        run: |
 #          mvn clean package -DskipTests=true
 
-      - name: Maven Package
+      - name: Maven Package and Tests
         run: mvn package
 
       - name: Set up Docker Buildx
